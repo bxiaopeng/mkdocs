@@ -30,6 +30,8 @@ except ImportError:                                         # pragma: no cover
     from urllib import pathname2url                         # noqa
     from UserDict import UserDict                           # noqa
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 PY3 = sys.version_info[0] == 3
 
@@ -126,6 +128,8 @@ def clean_directory(directory):
     """
     Remove the content of a directory recursively but not the directory itself.
     """
+    directory = unicode(directory, "utf-8")
+
     if not os.path.exists(directory):
         return
 
