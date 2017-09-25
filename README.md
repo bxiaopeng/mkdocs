@@ -1,39 +1,41 @@
-# MkDocs
+# MkDocs 支持中文搜索
 
-Project documentation with Markdown.
+MkDocs 非常好用，但是不支持中文搜索，本项目就是为了解决中文搜索的问题。
 
----
+>  参考资料：[macOS 使用 mkdocs 生成文档及解决中文搜索问题](http://beautycss.net/2017/01/23/use-mkdocs-on-mac/)
 
-[![PyPI Version][pypi-v-image]][pypi-v-link]
-[![Build Status][travis-image]][travis-link]
-[![Windows Build Status][appveyor-image]][appveyor-link]
-[![Coverage Status][codecov-image]][codecov-link]
-[![Landscale Code Health][landscape-image]][landscape-link]
+**问题描述：**
 
-- View the [MkDocs documentation][mkdocs].
-- Project [release notes][release-notes].
-- Visit the [MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki) for community
-  resources, including third party themes and a list of MkDocs users.
-- IRC channel: `#mkdocs` on freenode.
-- Discussions and support: <https://groups.google.com/forum/#!forum/mkdocs>
+1. mkdocs 生成 json 文件时将汉字转成了ascii 码字符；
+2. mkdocs 使用的搜索插件 lunr.js本身不支持中文；
 
-## Code of Conduct
+>  本项目直接修改源码，直接解决了这两个问题。
 
-Everyone interacting in the MkDocs project's codebases, issue trackers, chat
-rooms, and mailing lists is expected to follow the [PyPA Code of Conduct].
+**解决方案：**
 
-[appveyor-image]: https://img.shields.io/appveyor/ci/d0ugal/mkdocs/master.png
-[appveyor-link]: https://ci.appveyor.com/project/d0ugal/mkdocs
-[codecov-image]: http://codecov.io/github/mkdocs/mkdocs/coverage.svg?branch=master
-[codecov-link]: http://codecov.io/github/mkdocs/mkdocs?branch=master
-[landscape-image]: https://landscape.io/github/mkdocs/mkdocs/master/landscape.svg?style=flat-square
-[landscape-link]: https://landscape.io/github/mkdocs/mkdocs/master
-[pypi-v-image]: https://img.shields.io/pypi/v/mkdocs.png
-[pypi-v-link]: https://pypi.python.org/pypi/mkdocs
-[travis-image]: https://img.shields.io/travis/mkdocs/mkdocs/master.png
-[travis-link]: https://travis-ci.org/mkdocs/mkdocs
+1. search.py 中的 generate_search_index 方法中的返回值改为：
 
-[mkdocs]: http://www.mkdocs.org
-[release-notes]: http://www.mkdocs.org/about/release-notes/
+```
+return json.dumps(page_dicts, sort_keys=True, ensure_ascii=False, indent=4)
+```
 
-[PyPA Code of Conduct]: https://www.pypa.io/en/latest/code-of-conduct/
+2. 使用修改后的 [lunr.js](https://github.com/codepiano/lunr.js/blob/master/lunr.js) 替换 lunr.min.js
+
+
+## 安装
+
+如果你已经安装了 mkdocs ，请先卸载掉：
+```
+$ pip uninstall mkdocs
+```
+
+然后 clone  本项目到本地，切换到项目根目录，再进行安装：
+```
+$ python setup.py install
+```
+
+## 使用
+
+用法跟源来的 MkDocs 一样
+
+ [MkDocs wiki](https://github.com/mkdocs/mkdocs/wiki) 
