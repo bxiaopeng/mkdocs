@@ -128,7 +128,11 @@ def clean_directory(directory):
     """
     Remove the content of a directory recursively but not the directory itself.
     """
-    directory = unicode(directory, "utf-8")
+
+    if isinstance(directory, unicode):
+        directory = directory
+    else:
+        directory = unicode(directory, "utf-8")
 
     if not os.path.exists(directory):
         return
